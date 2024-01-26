@@ -1,0 +1,35 @@
+<p style="color: green"><%= notice %></p>
+<h1>Projects</h1>
+<%= DateTime.now %>
+<div id="projects">
+  <% @projects.each do |project| %>
+    <%= render project %>
+    <p>
+      <%= link_to "Show this project", project %>
+    </p>
+  <% end %>
+</div>
+<div class="row d-flex justify-content-center">
+  <div class="col-md-12">
+    <%= form_with url: projects_path, method: :get, data: { controller: "formsubmission", turbo_frame: 'project_listings', turbo_action: 'advance'}, class: "mt-0" do |form| %>
+      <%= form.label "Name", style: "display: block", class: "form-label" %>
+      <%= form.search_field :q, autofocus: true, class: 'form-control', placeholder: "Search for Project Name", data: { action: "input->formsubmission#search" } %>
+    <% end %>
+    <%= turbo_frame_tag 'project_listings' do %>
+      <div class="list border" >
+        <% unless @results.empty? %>
+          <% @results&.each do |project| %>
+            <div class="p-2">
+              <div class="fs-6">Name: <%= project.name %> - Description: <%= project.description %></div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="p-2">
+            <div class="fs-6">No Results</div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<%= link_to "New project", new_project_path %>
