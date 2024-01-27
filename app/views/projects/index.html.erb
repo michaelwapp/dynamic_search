@@ -1,6 +1,5 @@
 <p style="color: green"><%= notice %></p>
-<h1>Projects</h1>
-<%= DateTime.now %>
+<h1>Projects <%= DateTime.now %></h1>
 <div id="projects">
   <% @projects.each do |project| %>
     <%= render project %>
@@ -9,27 +8,22 @@
     </p>
   <% end %>
 </div>
-<div class="row d-flex justify-content-center">
-  <div class="col-md-12">
-    <%= form_with url: projects_path, method: :get, data: { controller: "formsubmission", turbo_frame: 'project_listings', turbo_action: 'advance'}, class: "mt-0" do |form| %>
-      <%= form.label "Name", style: "display: block", class: "form-label" %>
-      <%= form.search_field :q, autofocus: true, class: 'form-control', placeholder: "Search for Project Name", data: { action: "input->formsubmission#search" } %>
+<%= link_to "New project", new_project_path %>
+<div class="row d-flex justify-content-center my-4 w-25">
+  <div class="col">
+    <%= form_with url: projects_path, method: :get, data: { controller: "formsubmission", turbo_frame: 'project_listings' } do |form| %>
+      <%= form.search_field :q, class: 'form-control', placeholder: "Search for Name or Description", data: { action: "input->formsubmission#search" } %>
     <% end %>
     <%= turbo_frame_tag 'project_listings' do %>
-      <div class="list border" >
-        <% unless @results.empty? %>
-          <% @results&.each do |project| %>
-            <div class="p-2">
-              <div class="fs-6">Name: <%= project.name %> - Description: <%= project.description %></div>
-            </div>
-          <% end %>
-        <% else %>
-          <div class="p-2">
-            <div class="fs-6">No Results</div>
+      <% unless @results.empty? %>
+        <% @results&.each do |project| %>
+          <div class="p-2 border">
+            <div class="fs-6">Name: <%= project.name %> - Description: <%= project.description %></div>
           </div>
         <% end %>
-      </div>
+      <% end %>
+      <%= turbo_frame_tag 'external_search_result', src: load_external_search_project_path(q: @search, avoid_search: @results.any?), loading: :lazy do %>
+      <% end %>
     <% end %>
   </div>
 </div>
-<%= link_to "New project", new_project_path %>

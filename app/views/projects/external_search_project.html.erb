@@ -1,0 +1,7 @@
+<%= turbo_frame_tag "external_search_result" do %>
+  <% @external_search_result&.each do |project| %>
+    <div class="p-2 border">
+      <div class="fs-6">Name: <%= project.name %> - Description: <%= project.description %></div>
+    </div>
+  <% end %>
+<% end %>

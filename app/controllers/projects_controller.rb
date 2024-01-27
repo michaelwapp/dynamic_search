@@ -3,19 +3,20 @@ class ProjectsController < ApplicationController
 
   # GET /projects or /projects.json
   def index
-    puts params
     @projects = Project.all
     @search = params[:q]
     @results = if @search.blank?
       []
     else
-      Project.where('name LIKE :search OR description LIKE :search',
-                              search: "%#{@search}%").limit(20)
+      Project.where('name LIKE :search OR description LIKE :search', search: "%#{@search}%")
     end
   end
 
   def external_search_project
+    return if params[:q].blank? || params[:avoid_search] == "true"
 
+    sleep 1.0 # simulate external request
+    @external_search_result = [Project.new(name: "External Project", description: "Loaded from wherever")]
   end
 
   # GET /projects/1 or /projects/1.json

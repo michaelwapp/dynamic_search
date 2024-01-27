@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'projects/external_search_project' => 'projects#external_search_project', as: :load_external_search_project
+
   resources :projects
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -8,5 +10,4 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "projects#index"
-  get 'projects/external_search_project' => 'projects#external_search_project', as: :external_search_project
 end
